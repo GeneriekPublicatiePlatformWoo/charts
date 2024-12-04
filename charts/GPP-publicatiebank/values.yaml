@@ -124,10 +124,11 @@ tolerations: []
 affinity: {}
 
 persistence:
-  enabled: true
   size: 1Gi
   storageClassName: ""
   existingClaim: null
+  mediaMountSubpath: gpp-publicatiebank/media
+  privateMediaMountSubpath: gpp-publicatiebank/private_media
 
 # Existing Secret must be defined for AzureVaultSecret to work
 existingSecret: null
@@ -145,7 +146,54 @@ azureVaultSecret:
   # You must set .Values.existingSecret
   secretName: "{{ .Values.existingSecret }}"
 
+# -- Array with extra environment variables to add
+extraEnvVars: []
+# e.g:
+# extraEnvVars:
+#   - name: FOO
+#     value: "bar"
+
+# -- Optionally specify extra list of additional volumes
+extraVolumes: []
+# e.g:
+# extraVolumes:
+#   - name: verify-certs
+#     configMap:
+#       name: verify-certs
+
+# -- Optionally specify extra list of additional volumeMounts
+extraVolumeMounts: []
+# e.g:
+# extraVolumeMounts:
+#  - name: verify-certs
+#    mountPath: /etc/ssl/certs/extra-certs/
+
 settings:
+  allowedHosts: ""
+  djangoSettingsModule: woo_publications.conf.docker
+  useXForwardedHost: false
+
+  # -- Generate secret key at https://djecrety.ir/
+  secretKey: ""
+
+  # -- Choises Strict or Lax
+  cookieSamesite: ""
+
+  # -- sets the 'ENVIRONMENT' variable
+  environment: ""
+
+  # -- Display environment information in the header in the admin. Defaults to True. Environment information is only displayed to logged in users.
+  show_label_environment: "false"
+  # -- Environment information to display, defaults to the value of ENVIRONMENT. Only displayed when SHOW_ENVIRONMENT is set to True. You can set this to strings like OpenGem PROD or simply PROD, depending on your needs.
+  environment_label: ""
+  environment_background_color: ""
+
+
+  elasticapm:
+    url: ""
+    token: ""
+    serviceName: ""
+
   database:
     host: ""
     port: 5432
@@ -154,24 +202,74 @@ settings:
     name: ""
     sslmode: prefer
 
-  oidc:
-    adminRole: ""
-    authority: ""
-    clientId: ""
-    clientSecret: ""
-    roleClaimType: ""
-    idClaimType: ""
-    nameClaimType: ""
+  email:
+    host: localhost
+    port: 25
+    username: ""
+    password: ""
+    useTLS: false
+    defaultFrom: ""
 
-  odrc:
-    apiKey: ""
-    baseUrl: ""
+  sentry:
+    dsn: ""
 
-  aspnetcore:
-    forwardedHeadersEnabled: true
-    environment: ""
-    httpPorts: ""
+  documentMaxBodySize: 4G
 
+  # Cache settings, when the redis subchart is enabled these settings will be ignored and caching will default to the redis subchart services.
+  cache:
+    # e.g.:
+    # default: gpp-publicatiebank-redis-master-0:6379/0
+    # axes: gpp-publicatiebank-redis-master-0:6379/0
+    default: ""
+    axes: ""
+
+  isHttps: true
+
+  debug: false
+
+  uwsgi:
+    master: ''
+    threads: ''
+    processes: ''
+    maxRequests: ''
+    harakiri: ''
+
+  # -- Disable two factor authentication
+  disable2fa: false
+
+  # -- Display environment information in the header in the admin. Defaults to True. Environment information is only displayed to logged in users.
+  showLabelEnvironment: false
+  # -- Environment information to display, defaults to the value of ENVIRONMENT. Only displayed when SHOW_ENVIRONMENT is set to True. You can set this to strings like OpenGem PROD or simply PROD, depending on your needs.
+  environmentLabelName: ""
+  # --  CSS color value for the environment information background color. Defaults to orange, example values can be specified in HEX format too, e.g.: #FF0000 for red.
+  environmentLabelBackgroundColor: ""
+  # -- CSS color value for the environment information text color. Defaults to black. Follows the same rules as ENVIRONMENT_BACKGROUND_COLOR.
+  environmentLabelForegroundColor: ""
+
+nginx:
+  image:
+    repository: nginxinc/nginx-unprivileged
+    pullPolicy: IfNotPresent
+    tag: stable
+  existingConfigmap: null
+  service:
+    type: ClusterIP
+    port: 80
+    annotations: {}
+  replicaCount: 1
+  podLabels: {}
+  securityContext:
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 101
+  autoscaling:
+    enabled: false
+  livenessProbe: {}
+  readinessProbe: {}
+  resources: {}
 
 ##################
 # Redis subchart #

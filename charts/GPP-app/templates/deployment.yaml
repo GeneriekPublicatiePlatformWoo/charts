@@ -1,5 +1,5 @@
---- 
-# Deployment of the django app
+---
+# Application ODPC
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12,20 +12,20 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-  {{- include "gpp-app.selectorLabels" . | nindent 6 }}
+      {{- include "gpp-app.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
-      {{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-    {{- include "gpp-app.selectorLabels" . | nindent 8 }}
-    {{- with .Values.podLabels }}
+        {{- include "gpp-app.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
-    {{- end }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -45,13 +45,9 @@ spec:
                 name: {{ .Values.existingSecret | default (include "gpp-app.fullname" .) }}
             - configMapRef:
                 name: {{ include "gpp-app.fullname" . }}
-          env:
-            {{- if .Values.extraEnvVars }}
-            {{- include "gpp-app.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
           ports:
             - name: http
-              containerPort: 8000
+              containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -70,112 +66,7 @@ spec:
                   value: {{ include "gpp-app.fullname" . | quote }}
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
-          {{- toYaml .Values.resources | nindent 12 }}
-          volumeMounts:
-            - name: media
-              mountPath: /app/private_media
-              subPath: {{ .Values.persistence.privateMediaMountSubpath | default "gpp-app/private_media" }}          
-            - name: media
-              mountPath: /app/media
-              subPath: {{ .Values.persistence.mediaMountSubpath  | default "gpp-app/media" }}
-            {{- if .Values.extraVolumeMounts }}
-            {{- include "gpp-app.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
-            {{- end }}
-      volumes:
-        - name: media
-          persistentVolumeClaim:
-          {{- if .Values.persistence.enabled }}
-            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "gpp-app.fullname" . }}{{- end }}
-          {{- else }}
-          emptyDir: { }
-          {{- end }}
-        {{- if .Values.extraVolumes }}
-        {{- include "gpp-app.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
-        {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-      {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-      {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-
----
-
-# Deployment Nginx
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ include "gpp-app.nginxFullname" . }}
-  labels:
-    {{- include "gpp-app.nginxLabels" . | nindent 4 }}
-spec:
-  {{- if not .Values.nginx.autoscaling.enabled }}
-  replicas: {{ .Values.nginx.replicaCount }}
-  {{- end }}
-  selector:
-    matchLabels:
-      {{- include "gpp-app.nginxSelectorLabels" . | nindent 6 }}
-  template:
-    metadata:
-      annotations:
-        checksum/configmap-nginx: {{ include (print $.Template.BasePath "/configmap-nginx.yaml") . | sha256sum }}
-        {{- with .Values.podAnnotations }}
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
-      labels:
-        {{- include "gpp-app.nginxSelectorLabels" . | nindent 8 }}
-        {{- with .Values.nginx.podLabels }}
-            {{- toYaml . | nindent 8 }}
-        {{- end }}
-    spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "gpp-app.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      containers:
-        - name: {{ include "gpp-app.nginxFullname" . }}
-          securityContext:
-            {{- toYaml .Values.nginx.securityContext | nindent 12 }}
-          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}"
-          imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
-          livenessProbe:
-            httpGet:
-              path: /_health/
-              port: http
-          ports:
-            - name: http
-              containerPort: 8080
-          resources:
-            {{- toYaml .Values.nginx.resources | nindent 12 }}
-          volumeMounts:
-            - name: nginx-config
-              mountPath: /etc/nginx/conf.d/
-            - name: media
-              mountPath: /app/private-media
-              subPath: {{ .Values.persistence.privateMediaMountSubpath | default "gpp-app/private_media" }}
-            - name: media
-              mountPath: /app/media
-              subPath: {{ .Values.persistence.mediaMountSubpath  | default "gpp-app/media" }}
-      volumes:
-        - name: media
-          {{- if .Values.persistence.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "gpp-app.fullname" . }}{{- end }}
-          {{- else }}
-          emptyDir: { }
-          {{- end }}
-        - name: nginx-config
-          configMap:
-            name: {{ if .Values.nginx.existingConfigmap }}{{ .Values.nginx.existingConfigmap  }}{{- else }}{{ include "gpp-app.nginxFullname" . }}{{- end }}
+            {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

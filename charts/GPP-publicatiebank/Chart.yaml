@@ -1,13 +1,10 @@
 apiVersion: v2
 name: gpp-publicatiebank
-description: A helm chart for the ICATT Openbaar-Documenten-Publicatie-Component
+description: Een registratie die voorziet in de "Openbare Documenten opslag"-functionaliteiten
 
 type: application
-
-# Chart version 
-version: 0.1.0
-
-appVersion: "1.16.0"
+version: 1.0.0
+appVersion: 0.1.0
 
 dependencies:
   - name: redis
