@@ -1,13 +1,12 @@
 apiVersion: v2
 name: gpp-app
-description: A helm chart for the ICATT Openbaar-Documenten-Publicatie-Component
+description: A helm chart for the ICATT GPP app.
 
 type: application
 
 # Chart version 
 version: 0.1.0
-
-appVersion: "1.16.0"
+appVersion: 0.0.0
 
 dependencies:
   - name: redis
