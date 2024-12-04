@@ -1,0 +1,12 @@
+dependencies:
+- name: openzaak
+  repository: https://maykinmedia.github.io/charts/
+  version: 1.5.2
+- name: gpp-app
+  repository: https://GPP-Woo.github.io/charts
+  version: 0.1.0
+- name: gpp-publicatiebank
+  repository: https://GPP-Woo.github.io/charts
+  version: 1.0.0
+digest: sha256:8d3cf32850cd8ceb4546db74153f95de41d1227a2ac814aedc0bad0f6b46133a
+generated: "2024-12-11T16:07:09.782692508+01:00"

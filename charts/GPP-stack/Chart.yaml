@@ -1,0 +1,26 @@
+apiVersion: v2
+name: gpp-stack
+description: An umbrella chart for the GPP stack
+
+type: application
+
+# Chart version
+version: 0.1.0
+
+appVersion: "0.1.0"
+
+dependencies:
+  - name: openzaak
+    version: 1.5.2
+    repository: https://maykinmedia.github.io/charts/
+    condition: openzaak.enabled
+
+  - name: gpp-app
+    version: 0.1.0
+    repository: https://GPP-Woo.github.io/charts
+    condition: gpp-app.enabled
+
+  - name: gpp-publicatiebank
+    version: 1.0.0
+    repository: https://GPP-Woo.github.io/charts
+    condition: gpp-publicatiebank.enabled
