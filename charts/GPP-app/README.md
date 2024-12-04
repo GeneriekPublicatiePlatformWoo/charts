@@ -87,8 +87,8 @@ A helm chart for the ICATT GPP app.
 | settings.database.port | int | `5432` |  |
 | settings.database.sslmode | string | `"prefer"` |  |
 | settings.database.username | string | `""` |  |
-| settings.odrc.apiKey | string | `""` |  |
-| settings.odrc.baseUrl | string | `""` |  |
+| settings.gppPublicatiebank.apiKey | string | `""` |  |
+| settings.gppPublicatiebank.baseUrl | string | `""` |  |
 | settings.oidc.adminRole | string | `""` |  |
 | settings.oidc.authority | string | `""` |  |
 | settings.oidc.clientId | string | `""` |  |

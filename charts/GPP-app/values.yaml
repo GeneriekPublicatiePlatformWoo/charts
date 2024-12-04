@@ -163,7 +163,7 @@ settings:
     idClaimType: ""
     nameClaimType: ""
 
-  odrc:
+  gppPublicatiebank:
     apiKey: ""
     baseUrl: ""
 

@@ -9,7 +9,7 @@ data:
   POSTGRES_DB: {{ .Values.settings.database.name | toString | quote }}
   POSTGRES_PORT: {{ .Values.settings.database.port | toString | quote }}
   POSTGRES_USER: {{ .Values.settings.database.username | toString | quote }}
-  ODRC_BASE_URL: {{ .Values.settings.odrc.baseUrl | toString | quote }}
+  ODRC_BASE_URL: {{ .Values.settings.gppPublicatiebank.baseUrl | toString | quote }}
   OIDC_ADMIN_ROLE: {{ .Values.settings.oidc.adminRole | toString | quote }}
   {{- if .Values.settings.oidc.authority }}
   OIDC_AUTHORITY: {{ .Values.settings.oidc.authority | toString | quote }}
