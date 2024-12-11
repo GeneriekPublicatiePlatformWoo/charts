@@ -1,0 +1,31 @@
+apiVersion: v1
+entries:
+  gpp-app:
+  - apiVersion: v2
+    appVersion: 0.0.0
+    created: "2024-12-11T15:26:01.218815577+01:00"
+    description: A helm chart for the ICATT GPP app.
+    digest: c2bbe24ea900bad3c1f8d577dfd864c60f5b58a5761b36fc8f97f763a281fda8
+    name: gpp-app
+    type: application
+    urls:
+    - https://github.com/gpp-woo/charts/releases/download/gpp-app-0.1.0/gpp-app-0.1.0.tgz
+    version: 0.1.0
+  gpp-publicatiebank:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2024-12-11T15:26:01.231458946+01:00"
+    dependencies:
+    - name: redis
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - redis
+      version: 20.2.1
+    description: Een registratie die voorziet in de "Openbare Documenten opslag"-functionaliteiten
+    digest: 5b91db7ce609d8d8622b265bc71be5ff3bdd0f360c0a6eae3380f5fe1756fd43
+    name: gpp-publicatiebank
+    type: application
+    urls:
+    - https://github.com/gpp-woo/charts/releases/download/gpp-publicatiebank-1.0.0/gpp-publicatiebank-1.0.0.tgz
+    version: 1.0.0
+generated: "2024-12-11T15:26:01.217481633+01:00"
