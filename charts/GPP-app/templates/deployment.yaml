@@ -51,7 +51,7 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: http
               httpHeaders:
                 - name: Host
@@ -59,7 +59,7 @@ spec:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: http
               httpHeaders:
                 - name: Host

@@ -3,9 +3,6 @@ global:
     # -- Global databasehost, overrides setting.database.host
     databaseHost: ""
 
-tags:
-  redis: true
-
 replicaCount: 1
 
 image:
@@ -172,21 +169,3 @@ settings:
     environment: ""
     httpPorts: ""
 
-
-##################
-# Redis subchart #
-##################
-
-redis:
-  architecture: standalone
-  auth:
-    enabled: false
-  master:
-    persistence:
-      enabled: true
-      size: 8Gi
-      storageClass: ""
-    resources:
-      requests:
-        cpu: 10m
-        memory: 20Mi

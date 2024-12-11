@@ -4,12 +4,6 @@
 
 A helm chart for the ICATT GPP app.
 
-## Requirements
-
-| Repository | Name | Version |
-|------------|------|---------|
-| https://charts.bitnami.com/bitnami | redis | 20.2.1 |
-
 ## Values
 
 | Key | Type | Default | Description |
@@ -59,13 +53,6 @@ A helm chart for the ICATT GPP app.
 | readinessProbe.periodSeconds | int | `10` |  |
 | readinessProbe.successThreshold | int | `1` |  |
 | readinessProbe.timeoutSeconds | int | `5` |  |
-| redis.architecture | string | `"standalone"` |  |
-| redis.auth.enabled | bool | `false` |  |
-| redis.master.persistence.enabled | bool | `true` |  |
-| redis.master.persistence.size | string | `"8Gi"` |  |
-| redis.master.persistence.storageClass | string | `""` |  |
-| redis.master.resources.requests.cpu | string | `"10m"` |  |
-| redis.master.resources.requests.memory | string | `"20Mi"` |  |
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
 | securityContext.capabilities.drop[0] | string | `"ALL"` |  |
@@ -96,6 +83,5 @@ A helm chart for the ICATT GPP app.
 | settings.oidc.idClaimType | string | `""` |  |
 | settings.oidc.nameClaimType | string | `""` |  |
 | settings.oidc.roleClaimType | string | `""` |  |
-| tags.redis | bool | `true` |  |
 | tolerations | list | `[]` |  |
 
