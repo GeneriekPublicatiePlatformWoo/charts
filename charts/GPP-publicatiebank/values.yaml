@@ -181,14 +181,6 @@ settings:
 
   # -- sets the 'ENVIRONMENT' variable
   environment: ""
-
-  # -- Display environment information in the header in the admin. Defaults to True. Environment information is only displayed to logged in users.
-  show_label_environment: "false"
-  # -- Environment information to display, defaults to the value of ENVIRONMENT. Only displayed when SHOW_ENVIRONMENT is set to True. You can set this to strings like OpenGem PROD or simply PROD, depending on your needs.
-  environment_label: ""
-  environment_background_color: ""
-
-
   elasticapm:
     url: ""
     token: ""
