@@ -1,0 +1,190 @@
+--- 
+# Deployment of the django app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gpp-publicatiebank.fullname" . }}
+  labels:
+    {{- include "gpp-publicatiebank.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+  {{- include "gpp-publicatiebank.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+    {{- include "gpp-publicatiebank.selectorLabels" . | nindent 8 }}
+    {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "gpp-publicatiebank.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.existingSecret | default (include "gpp-publicatiebank.fullname" .) }}
+            - configMapRef:
+                name: {{ include "gpp-publicatiebank.fullname" . }}
+          env:
+            {{- if .Values.extraEnvVars }}
+            {{- include "gpp-publicatiebank.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: {{ include "gpp-publicatiebank.fullname" . | quote }}
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: {{ include "gpp-publicatiebank.fullname" . | quote }}
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: media
+              mountPath: /app/private_media
+              subPath: {{ .Values.persistence.privateMediaMountSubpath | default "gpp-publicatiebank/private_media" }}          
+            - name: media
+              mountPath: /app/media
+              subPath: {{ .Values.persistence.mediaMountSubpath  | default "gpp-publicatiebank/media" }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "gpp-publicatiebank.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+          {{- if .Values.persistence.enabled }}
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "gpp-publicatiebank.fullname" . }}{{- end }}
+          {{- else }}
+          emptyDir: { }
+          {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "gpp-publicatiebank.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+---
+
+# Deployment Nginx
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gpp-publicatiebank.nginxFullname" . }}
+  labels:
+    {{- include "gpp-publicatiebank.nginxLabels" . | nindent 4 }}
+spec:
+  {{- if not .Values.nginx.autoscaling.enabled }}
+  replicas: {{ .Values.nginx.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "gpp-publicatiebank.nginxSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/configmap-nginx: {{ include (print $.Template.BasePath "/configmap-nginx.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "gpp-publicatiebank.nginxSelectorLabels" . | nindent 8 }}
+        {{- with .Values.nginx.podLabels }}
+            {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "gpp-publicatiebank.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ include "gpp-publicatiebank.nginxFullname" . }}
+          securityContext:
+            {{- toYaml .Values.nginx.securityContext | nindent 12 }}
+          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}"
+          imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
+          livenessProbe:
+            httpGet:
+              path: /_health/
+              port: http
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            {{- toYaml .Values.nginx.resources | nindent 12 }}
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/
+            - name: media
+              mountPath: /app/private-media
+              subPath: {{ .Values.persistence.privateMediaMountSubpath | default "gpp-publicatiebank/private_media" }}
+            - name: media
+              mountPath: /app/media
+              subPath: {{ .Values.persistence.mediaMountSubpath  | default "gpp-publicatiebank/media" }}
+      volumes:
+        - name: media
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "gpp-publicatiebank.fullname" . }}{{- end }}
+          {{- else }}
+          emptyDir: { }
+          {{- end }}
+        - name: nginx-config
+          configMap:
+            name: {{ if .Values.nginx.existingConfigmap }}{{ .Values.nginx.existingConfigmap  }}{{- else }}{{ include "gpp-publicatiebank.nginxFullname" . }}{{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
