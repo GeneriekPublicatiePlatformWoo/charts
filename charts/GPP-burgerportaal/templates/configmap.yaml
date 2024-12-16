@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gpp-burgerportaal.fullname" . }}
+  labels:
+    {{- include "gpp-burgerportaal.labels" . | nindent 4 }}
+data:
+  ODRC_BASE_URL: {{ .Values.settings.gppPublicatiebank.baseUrl | toString | quote }}
+  REDIRECT_URL: {{ .Values.settings.redirectUrl | toString | quote }}
+  {{- if .Values.settings.sitemapCacheDurationHours }}
+  SITEMAP_CACHE_DURATION_HOURS: {{ .Values.settings.sitemapCacheDurationHours }}
+  {{- end }}
+  {{- if .Values.settings.downloadTimeoutMinutes }}
+  DOWNLOAD_TIMEOUT_MINUTES: {{ .Values.settings.downloadTimeoutMinutes }}
+  {{- end }}
