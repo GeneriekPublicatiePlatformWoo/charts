@@ -1,6 +1,6 @@
 apiVersion: v2
 name: gpp-burgerportaal
-description: A helm chart for the ICATT GPP app.
+description: A helm chart for the ICATT GPP burgerportaal.
 
 type: application
 
