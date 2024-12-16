@@ -11,6 +11,17 @@ entries:
     urls:
     - https://github.com/gpp-woo/charts/releases/download/gpp-app-0.1.0/gpp-app-0.1.0.tgz
     version: 0.1.0
+  gpp-burgerportaal:
+  - apiVersion: v2
+    appVersion: 0.0.0
+    created: "2024-12-16T18:16:46.206532163Z"
+    description: A helm chart for the ICATT GPP burgerportaal.
+    digest: 5984782a9813e6abb05ca475100ab95b924305863c8df90035e616335a1eeba3
+    name: gpp-burgerportaal
+    type: application
+    urls:
+    - https://github.com/GPP-Woo/charts/releases/download/gpp-burgerportaal-0.1.0/gpp-burgerportaal-0.1.0.tgz
+    version: 0.1.0
   gpp-publicatiebank:
   - apiVersion: v2
     appVersion: 0.1.0
@@ -28,4 +39,4 @@ entries:
     urls:
     - https://github.com/gpp-woo/charts/releases/download/gpp-publicatiebank-1.0.0/gpp-publicatiebank-1.0.0.tgz
     version: 1.0.0
-generated: "2024-12-11T15:26:01.217481633+01:00"
+generated: "2024-12-16T18:16:46.20654069Z"
