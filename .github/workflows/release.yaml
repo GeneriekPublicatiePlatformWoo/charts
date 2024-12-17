@@ -28,7 +28,7 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo add maykin https://maykinmedia.github.io/charts
-          helm repo add gpp-woo https://gpp-woo.github.io/charts
+          helm repo add gpp-woo https://GPP-Woo.github.io/charts
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.4.0
