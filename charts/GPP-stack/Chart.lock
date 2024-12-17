@@ -8,5 +8,8 @@ dependencies:
 - name: gpp-publicatiebank
   repository: https://GPP-Woo.github.io/charts
   version: 1.0.0
-digest: sha256:8d3cf32850cd8ceb4546db74153f95de41d1227a2ac814aedc0bad0f6b46133a
-generated: "2024-12-11T16:07:09.782692508+01:00"
+- name: gpp-burgerportaal
+  repository: https://GPP-Woo.github.io/charts
+  version: 0.1.0
+digest: sha256:7e6c1e33215ccde5b241d9504a415850e6a49974bda7525c723482397bf34849
+generated: "2024-12-17T14:33:13.461463808+01:00"

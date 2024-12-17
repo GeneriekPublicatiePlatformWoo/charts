@@ -24,3 +24,8 @@ dependencies:
     version: 1.0.0
     repository: https://GPP-Woo.github.io/charts
     condition: gpp-publicatiebank.enabled
+
+  - name: gpp-burgerportaal
+    version: 0.1.0
+    repository: https://GPP-Woo.github.io/charts
+    condition: gpp-burgerportaal.enabled
