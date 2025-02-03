@@ -5,7 +5,7 @@ description: An umbrella chart for the GPP stack
 type: application
 
 # Chart version
-version: 0.1.0
+version: 0.2.0
 
 appVersion: "0.1.0"
 
@@ -29,3 +29,13 @@ dependencies:
     version: 0.1.0
     repository: https://GPP-Woo.github.io/charts
     condition: gpp-burgerportaal.enabled
+
+  - name: eck-operator
+    version: ~2.9.0
+    repository: "@elastic"
+    condition: eck-operator.enabled
+
+  - name: eck-stack
+    version: ~0.14.1
+    repository: "@elastic"
+    condition: eck-stack.enabled
