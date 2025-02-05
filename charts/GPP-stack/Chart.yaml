@@ -27,7 +27,7 @@ dependencies:
 
   - name: gpp-burgerportaal
     version: 0.2.0
-    repository: "https://GPP-Woo.github.io/charts"
+    repository: "file://../GPP-burgerportaal"
     condition: gpp-burgerportaal.enabled
 
   - name: eck-operator

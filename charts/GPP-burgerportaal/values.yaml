@@ -156,3 +156,7 @@ settings:
     environment: ""
     httpPorts: ""
 
+  elasticsearch:
+    username: ""
+    password: ""
+

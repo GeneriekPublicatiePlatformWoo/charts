@@ -13,3 +13,6 @@ data:
   {{- if .Values.settings.downloadTimeoutMinutes }}
   DOWNLOAD_TIMEOUT_MINUTES: {{ .Values.settings.downloadTimeoutMinutes }}
   {{- end }}
+  {{- if .Values.settings.elasticsearch.username }}
+  ELASTICSEARCH_USERNAME: {{ .Values.settings.elasticsearch.username }}
+  {{- end }}
