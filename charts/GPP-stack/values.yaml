@@ -1009,7 +1009,54 @@ eck-operator:
   webhook:
     enabled: false
 
-eck-stack:
+eck-elasticsearch:
   enabled: true
-  eck-kibana:
-    enabled: false
+  fullnameOverride: elasticsearch
+  version: 8.17.1
+  nodeSets:
+  - name: default
+    count: 1
+    # Comment out when setting the vm.max_map_count via initContainer, as these are mutually exclusive.
+    # For production workloads, it is strongly recommended to increase the kernel setting vm.max_map_count to 262144
+    # and leave node.store.allow_mmap unset.
+    # ref: https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-virtual-memory.html
+    #
+    config:
+      # node.store.allow_mmap: false
+      node.roles:
+      - data
+      - master
+    podTemplate:
+      spec:
+        initContainers:
+        - command:
+          - sh
+          - "-c"
+          - sysctl -w vm.max_map_count=262144
+          name: sysctl
+          securityContext:
+            privileged: true
+            runAsUser: 0
+
+  - name: ingest
+    count: 1
+    # Comment out when setting the vm.max_map_count via initContainer, as these are mutually exclusive.
+    # For production workloads, it is strongly recommended to increase the kernel setting vm.max_map_count to 262144
+    # and leave node.store.allow_mmap unset.
+    # ref: https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-virtual-memory.html
+    #
+    config:
+      # node.store.allow_mmap: false
+      node.roles:
+      - ingest
+    podTemplate:
+      spec:
+        initContainers:
+        - command:
+          - sh
+          - "-c"
+          - sysctl -w vm.max_map_count=262144
+          name: sysctl
+          securityContext:
+            privileged: true
+            runAsUser: 0

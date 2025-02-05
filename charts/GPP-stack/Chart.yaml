@@ -26,8 +26,8 @@ dependencies:
     condition: gpp-publicatiebank.enabled
 
   - name: gpp-burgerportaal
-    version: 0.1.0
-    repository: https://GPP-Woo.github.io/charts
+    version: 0.2.0
+    repository: "file://../GPP-burgerportaal"
     condition: gpp-burgerportaal.enabled
 
   - name: eck-operator
@@ -35,7 +35,7 @@ dependencies:
     repository: "@elastic"
     condition: eck-operator.enabled
 
-  - name: eck-stack
+  - name: eck-elasticsearch
     version: ~0.14.1
     repository: "@elastic"
     condition: eck-stack.enabled
