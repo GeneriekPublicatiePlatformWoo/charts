@@ -38,4 +38,4 @@ dependencies:
   - name: eck-elasticsearch
     version: ~0.14.1
     repository: "@elastic"
-    condition: eck-stack.enabled
+    condition: eck-elasticsearch.enabled
