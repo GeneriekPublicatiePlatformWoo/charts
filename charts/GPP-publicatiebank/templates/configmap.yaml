@@ -73,3 +73,9 @@ data:
   {{- if .Values.settings.environmentLabelForegroundColor }}
   ENVIRONMENT_FOREGROUND_COLOR: {{ .Values.settings.environmentLabelForegroundColor | toString | quote }}
   {{- end }}
+  {{- if .Values.extraVerifyCerts }}
+  EXTRA_VERIFY_CERTS: {{ .Values.extraVerifyCerts| toString | quote }}
+  {{- end }}
+  {{- if (.Values.settings.elasticsearch).username }}
+  ELASTICSEARCH_USERNAME: {{ .Values.settings.elasticsearch.username| toString | quote }}
+  {{- end }}

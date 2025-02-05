@@ -9,13 +9,13 @@ dependencies:
   repository: https://GPP-Woo.github.io/charts
   version: 1.0.0
 - name: gpp-burgerportaal
-  repository: file://../GPP-burgerportaal
-  version: 0.2.0
+  repository: https://GPP-Woo.github.io/charts
+  version: 0.1.0
 - name: eck-operator
   repository: https://helm.elastic.co
   version: 2.9.0
 - name: eck-elasticsearch
   repository: https://helm.elastic.co
   version: 0.14.1
-digest: sha256:e4d6d9d647f43544a2ef879fe5a442de87e8f3a6132e1cc15de73e1015f70e58
-generated: "2025-02-05T12:21:07.6805498+01:00"
+digest: sha256:330869f7182e222caab8f5ba5198442156635d2cf7cc97c3266634234ce2427a
+generated: "2025-02-05T13:44:26.4675509+01:00"

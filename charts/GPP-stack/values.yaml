@@ -1013,6 +1013,10 @@ eck-elasticsearch:
   enabled: true
   fullnameOverride: elasticsearch
   version: 8.17.1
+  # auth:
+  #   fileRealm:
+  #   - secretName: burgerportaal-elastic-secret
+  #   - secretName: publicatiebank-elastic-secret
   nodeSets:
   - name: default
     count: 1
