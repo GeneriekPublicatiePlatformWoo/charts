@@ -1,6 +1,6 @@
 # gpp-publicatiebank
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 Een registratie die voorziet in de "Openbare Documenten opslag"-functionaliteiten
 
@@ -102,6 +102,9 @@ Een registratie die voorziet in de "Openbare Documenten opslag"-functionaliteite
 | settings.allowedHosts | string | `""` |  |
 | settings.cache.axes | string | `""` |  |
 | settings.cache.default | string | `""` |  |
+| settings.celery.brokerUrl | string | `""` |  |
+| settings.celery.logLevel | string | `"debug"` |  |
+| settings.celery.resultBackend | string | `""` |  |
 | settings.cookieSamesite | string | `""` | Choises Strict or Lax |
 | settings.database.host | string | `""` |  |
 | settings.database.name | string | `""` |  |
@@ -138,4 +141,26 @@ Een registratie die voorziet in de "Openbare Documenten opslag"-functionaliteite
 | settings.uwsgi.threads | string | `""` |  |
 | tags.redis | bool | `true` |  |
 | tolerations | list | `[]` |  |
+| worker.autoscaling.behavior | object | `{}` |  |
+| worker.autoscaling.enabled | bool | `false` |  |
+| worker.autoscaling.maxReplicas | int | `100` |  |
+| worker.autoscaling.minReplicas | int | `1` |  |
+| worker.autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
+| worker.autoscaling.targetMemoryUtilizationPercentage | int | `80` |  |
+| worker.concurrency | int | `4` |  |
+| worker.label | string | `"1"` |  |
+| worker.livenessProbe.enabled | bool | `false` |  |
+| worker.livenessProbe.exec.command[0] | string | `"/bin/sh"` |  |
+| worker.livenessProbe.exec.command[1] | string | `"-c"` |  |
+| worker.livenessProbe.exec.command[2] | string | `"celery --workdir src --app openforms.celery inspect --destination celery@${HOSTNAME} active"` |  |
+| worker.livenessProbe.failureThreshold | int | `3` |  |
+| worker.livenessProbe.initialDelaySeconds | int | `60` |  |
+| worker.livenessProbe.periodSeconds | int | `30` |  |
+| worker.livenessProbe.successThreshold | int | `1` |  |
+| worker.livenessProbe.timeoutSeconds | int | `10` |  |
+| worker.name | string | `""` |  |
+| worker.podLabels | object | `{}` |  |
+| worker.queueName | string | `""` |  |
+| worker.replicaCount | int | `1` |  |
+| worker.resources | object | `{}` |  |
 
